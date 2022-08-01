@@ -14,6 +14,8 @@ root.title('Egon Base calculator')
 root.resizable(False, False)
 root.configure(bg='white')
 
+base = ['decimal']
+
 
 def button_click(number):
     current = entry.get()
@@ -29,6 +31,7 @@ def button_equal(event=None):
     second_number = entry.get()
     entry.delete(0, END)
     s_num = int(second_number)
+    # if base == 'decimal':
     if operation == '+':
         entry.insert(0, f_num + s_num)
     if operation == '*':
@@ -76,10 +79,10 @@ def button_div():
 
 
 def base_settings(mode='decimal'):
+    global last_base, base
     root.title(f'Egon Base calculator - {mode}')
-    if not entry.get() == '':
-        # convert.method
-        print('converted!')
+    last_base = base[-1]
+    base.append(mode)
 
 
     if mode == 'decimal':
@@ -99,6 +102,7 @@ def base_settings(mode='decimal'):
         bD.configure(state='disabled')
         bE.configure(state='disabled')
         bF.configure(state='disabled')
+        convert(last_base, 'decimal')
 
 
     elif mode == 'binary':
@@ -118,6 +122,7 @@ def base_settings(mode='decimal'):
         bD.configure(state='disabled')
         bE.configure(state='disabled')
         bF.configure(state='disabled')
+        convert(last_base, 'binary')
 
 
     elif mode == 'octal':
@@ -137,6 +142,7 @@ def base_settings(mode='decimal'):
         bD.configure(state='disabled')
         bE.configure(state='disabled')
         bF.configure(state='disabled')
+        convert(last_base, 'octal')
 
     elif mode == 'hexadecimal':
         b1.configure(state='normal')
@@ -155,12 +161,20 @@ def base_settings(mode='decimal'):
         bD.configure(state='normal')
         bE.configure(state='normal')
         bF.configure(state='normal')
+        convert(last_base, 'hexadecimal')
 
 
-# def convert(base):
-#     num = entry.get()
-#     if base == 'binary':
-#         
+def convert(fromBase,toBase):
+    if not entry.get() == '':
+        num = entry.get()
+        entry.delete(0 , END)
+        str(fromBase)
+        if toBase == 'binary':
+            if fromBase == 'decimal':
+                num = (bin(int(num))) # .removeprefix('0b')
+
+        entry.insert(0, int(num[2:]))
+#
 button_frame = Frame(root, padx=20)
 button_frame.grid(row=1)
 # creating numerical buttons
@@ -300,5 +314,8 @@ entry.grid(row=0, column=0, columnspan=4, sticky=N)
 # shortcuts
 root.bind('<c>', button_clear)
 
+
+
 base_settings()
 root.mainloop()
+
