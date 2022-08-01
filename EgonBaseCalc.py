@@ -84,7 +84,6 @@ def base_settings(mode='decimal'):
     last_base = base[-1]
     base.append(mode)
 
-
     if mode == 'decimal':
         b1.configure(state='normal')
         b2.configure(state='normal')
@@ -107,7 +106,7 @@ def base_settings(mode='decimal'):
 
     elif mode == 'binary':
         b1.configure(state='normal')
-        b2.configure(state='normal')
+        b2.configure(state='disabled')
         b3.configure(state='disabled')
         b4.configure(state='disabled')
         b5.configure(state='disabled')
@@ -115,13 +114,18 @@ def base_settings(mode='decimal'):
         b7.configure(state='disabled')
         b8.configure(state='disabled')
         b9.configure(state='disabled')
-        b0.configure(state='disabled')
+        b0.configure(state='normal')
         bA.configure(state='disabled')
         bB.configure(state='disabled')
         bC.configure(state='disabled')
         bD.configure(state='disabled')
         bE.configure(state='disabled')
         bF.configure(state='disabled')
+        equal_b.configure(state='disabled')
+        add_b.configure(state='disabled')
+        sub_b.configure(state='disabled')
+        mul_b.configure(state='disabled')
+        div_b.configure(state='disabled')
         convert(last_base, 'binary')
 
 
@@ -142,6 +146,11 @@ def base_settings(mode='decimal'):
         bD.configure(state='disabled')
         bE.configure(state='disabled')
         bF.configure(state='disabled')
+        equal_b.configure(state='disabled')
+        add_b.configure(state='disabled')
+        sub_b.configure(state='disabled')
+        mul_b.configure(state='disabled')
+        div_b.configure(state='disabled')
         convert(last_base, 'octal')
 
     elif mode == 'hexadecimal':
@@ -161,25 +170,50 @@ def base_settings(mode='decimal'):
         bD.configure(state='normal')
         bE.configure(state='normal')
         bF.configure(state='normal')
+        equal_b.configure(state='disabled')
+        add_b.configure(state='disabled')
+        sub_b.configure(state='disabled')
+        mul_b.configure(state='disabled')
+        div_b.configure(state='disabled')
         convert(last_base, 'hexadecimal')
 
 
-def convert(fromBase,toBase):
+def convert(fromBase, toBase):
     if not entry.get() == '':
         num = entry.get()
         entry.delete(0, END)
         str(fromBase)
-        if toBase == 'binary':
-            if fromBase == 'decimal':
-                num = (bin(int(num)))[2:] # .removeprefix('0b')
-
-        if toBase == 'octal':
-            if fromBase == 'decimal':
+        if fromBase == 'decimal':
+            if toBase == 'binary':
+                num = (bin(int(num)))[2:]
+            elif toBase == 'octal':
                 num = (oct(int(num)))[2:]
-        if toBase == 'hexadecimal':
-            if fromBase == 'decimal':
+            elif toBase == 'hexadecimal':
                 num = (hex(int(num)))[2:]
+        elif fromBase == 'binary':
+            if toBase == 'decimal':
+                num = int(num, 2)
+            elif toBase == 'octal':
+                num = oct(int(num, 2))[2:]
+            elif toBase == 'hexadecimal':
+                num = hex(int(num, 2))[2:]
+        elif fromBase == 'octal':
+            if toBase == 'decimal':
+                num = int(num, 8)
+            elif toBase == 'binary':
+                num = bin(int(num, 8))[2:]
+            elif toBase == 'hexadecimal':
+                num = hex(int(num, 8))[2:]
+        else:
+            if toBase == 'decimal':
+                num = int(num, 16)
+            elif toBase == 'binary':
+                num = bin(int(num, 16))[2:]
+            elif toBase == 'octal':
+                num = oct(int(num, 16))[2:]
         entry.insert(0, (num))
+
+
 # creating button frame
 button_frame = Frame(root, padx=20)
 button_frame.grid(row=1)
@@ -319,8 +353,6 @@ entry.grid(row=0, column=0, columnspan=4, sticky=N)
 
 # shortcuts
 root.bind('<c>', button_clear)
-
-
 
 base_settings()
 root.mainloop()
