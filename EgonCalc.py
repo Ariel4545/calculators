@@ -21,7 +21,7 @@ def button_click(number):
     entry.insert(0, str(current) + str(number))
 
 
-def button_clear():
+def button_clear(event=None):
     entry.delete(0, END)
 
 
@@ -150,9 +150,11 @@ div_b.grid(row=4, column=4)
 clear_b.grid(row=4, column=2)
 
 # creating & placing the calculations bar
-label = Label(root)
 entry = Entry(root, borderwidth=2, width=40, justify=CENTER, state='normal')
 entry.grid(row=0, column=0, columnspan=4, sticky=N)
 
+# shortcuts
+root.bind('<c>', button_clear)
 
 root.mainloop()
+
