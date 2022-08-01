@@ -1,10 +1,10 @@
-![My project-2](https://user-images.githubusercontent.com/95249974/182149711-60206c69-4e8d-49c5-81a6-9bbca8ec54a0.png)
+![My project-1 (1)(1)](https://user-images.githubusercontent.com/95249974/182220333-0305942e-f94e-4d2f-a8dc-610f376f8a65.png)
 
 ## avaliable:
-1. simple calc
-
+1. simple calc (finished)
+2. base calc (unfinished)
 ## in the making:
-1. base calc
+
 
 ## planed:
 1. weight calc
