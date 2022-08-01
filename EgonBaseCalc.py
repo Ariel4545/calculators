@@ -167,14 +167,20 @@ def base_settings(mode='decimal'):
 def convert(fromBase,toBase):
     if not entry.get() == '':
         num = entry.get()
-        entry.delete(0 , END)
+        entry.delete(0, END)
         str(fromBase)
         if toBase == 'binary':
             if fromBase == 'decimal':
-                num = (bin(int(num))) # .removeprefix('0b')
+                num = (bin(int(num)))[2:] # .removeprefix('0b')
 
-        entry.insert(0, int(num[2:]))
-#
+        if toBase == 'octal':
+            if fromBase == 'decimal':
+                num = (oct(int(num)))[2:]
+        if toBase == 'hexadecimal':
+            if fromBase == 'decimal':
+                num = (hex(int(num)))[2:]
+        entry.insert(0, (num))
+# creating button frame
 button_frame = Frame(root, padx=20)
 button_frame.grid(row=1)
 # creating numerical buttons
