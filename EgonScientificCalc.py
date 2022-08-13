@@ -57,6 +57,8 @@ def button_equal(event=None):
             entry.insert(0, math.cos(f_num))
         if operation == 'tan':
             entry.insert(0, math.tan(f_num))
+        if operation == 'abs':
+            entry.insert(0, abs(f_num))
 
 
 def op(oper):
@@ -157,7 +159,9 @@ cos_b = Button(button_frame, text="cos", padx=padx_oper, pady=pady_oper, command
 tan_b = Button(button_frame, text="tan", padx=padx_oper, pady=pady_oper, command=lambda: op('tan'), relief=FLAT,
                height=button_height
                , width=button_width)
-
+abs_b = Button(button_frame, text="|X|", padx=padx_oper, pady=pady_oper, command=lambda: op('abs'), relief=FLAT,
+               height=button_height
+               , width=button_width)
 clear_b = Button(button_frame, text="clear", padx=padx_oper, pady=pady_oper, command=lambda: button_clear(),
                  relief=FLAT,
                  height=button_height
@@ -175,6 +179,7 @@ exp_b.grid(row=0, column=0)
 sin_b.grid(row=1, column=0)
 cos_b.grid(row=2, column=0)
 tan_b.grid(row=3, column=0)
+abs_b.grid(row=0, column=3)
 clear_b.grid(row=4, column=3)
 
 # creating & placing the calculations bar
@@ -185,4 +190,3 @@ entry.grid(row=0, column=0, columnspan=1, sticky=N)
 root.bind('<c>', button_clear)
 
 root.mainloop()
-
