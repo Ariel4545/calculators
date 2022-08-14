@@ -18,6 +18,8 @@ root.geometry(f'{width}x{height}+{placement_x}+{placement_y}')
 root.title("Egon scientific calculator")
 root.resizable(False, False)
 root.configure(bg='white')
+operation_color = '#ededed'
+equal_color = 'light blue'
 
 
 def button_click(number):
@@ -132,46 +134,46 @@ b0.grid(row=4, column=1)
 padx_oper = padx_b
 pady_oper = pady_b
 equal_b = Button(button_frame, text="=", padx=padx_oper, pady=pady_oper, command=lambda: button_equal(), relief=FLAT,
-                 height=button_height
+                 height=button_height, bg=equal_color
                  , width=button_width)
 add_b = Button(button_frame, text="+", padx=padx_oper, pady=pady_oper, command=lambda: op('+'), relief=FLAT,
-               height=button_height
+               height=button_height, bg=operation_color
                , width=button_width)
 sub_b = Button(button_frame, text="-", padx=padx_oper, pady=pady_oper, command=lambda: op('-'), relief=FLAT,
-               height=button_height
+               height=button_height, bg=operation_color
                , width=button_width)
 mul_b = Button(button_frame, text="*", padx=padx_oper, pady=pady_oper, command=lambda: op('*'), relief=FLAT,
-               height=button_height
+               height=button_height, bg=operation_color
                , width=button_width)
 div_b = Button(button_frame, text="÷", padx=padx_oper, pady=pady_oper, command=lambda: op('/'), relief=FLAT,
-               height=button_height
+               height=button_height, bg=operation_color
                , width=button_width)
 power_b = Button(button_frame, text="^", padx=padx_oper, pady=pady_oper, command=lambda: op('^'), relief=FLAT,
-                 height=button_height
+                 height=button_height, bg=operation_color
                  , width=button_width)
 sqrt_b = Button(button_frame, text="√", padx=padx_oper, pady=pady_oper, command=lambda: op('√'), relief=FLAT,
-                height=button_height
+                height=button_height, bg=operation_color
                 , width=button_width)
 exp_b = Button(button_frame, text="exp", padx=padx_oper, pady=pady_oper, command=lambda: op('exp'), relief=FLAT,
-               height=button_height
+               height=button_height, bg=operation_color
                , width=button_width)
 sin_b = Button(button_frame, text="sin", padx=padx_oper, pady=pady_oper, command=lambda: op('sin'), relief=FLAT,
-               height=button_height
+               height=button_height, bg=operation_color
                , width=button_width)
 cos_b = Button(button_frame, text="cos", padx=padx_oper, pady=pady_oper, command=lambda: op('cos'), relief=FLAT,
-               height=button_height
+               height=button_height, bg=operation_color
                , width=button_width)
 tan_b = Button(button_frame, text="tan", padx=padx_oper, pady=pady_oper, command=lambda: op('tan'), relief=FLAT,
-               height=button_height
+               height=button_height, bg=operation_color
                , width=button_width)
 abs_b = Button(button_frame, text="|X|", padx=padx_oper, pady=pady_oper, command=lambda: op('abs'), relief=FLAT,
-               height=button_height
+               height=button_height, bg=operation_color
                , width=button_width)
 fac_b = Button(button_frame, text="!n", padx=padx_oper, pady=pady_oper, command=lambda: op('fact'), relief=FLAT,
-               height=button_height
+               height=button_height, bg=operation_color
                , width=button_width)
 rad_b = Button(button_frame, text="randint", padx=padx_oper, pady=pady_oper, command=lambda: op('randint'), relief=FLAT,
-               height=button_height
+               height=button_height, bg=operation_color
                , width=button_width)
 clear_b = Button(button_frame, text="clear", padx=padx_oper, pady=pady_oper, command=lambda: button_clear(),
                  relief=FLAT,
