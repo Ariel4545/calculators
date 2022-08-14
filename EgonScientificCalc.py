@@ -35,35 +35,35 @@ def button_equal(event=None):
         second_number = entry.get()
         entry.delete(0, END)
         s_num = int(second_number)
-        # aromatics
         if operation == '+':
-            entry.insert(0, f_num + s_num)
+            eq = (f_num + s_num)
         if operation == '*':
-            entry.insert(0, f_num * s_num)
+            eq = (f_num * s_num)
         if operation == '/':
-            entry.insert(0, f_num / s_num)
+            eq = (f_num / s_num)
         if operation == '-':
-            entry.insert(0, f_num - s_num)
+            eq = (f_num - s_num)
         if operation == '^':
-            entry.insert(0, pow(f_num, s_num))
+            eq = (pow(f_num, s_num))
         if operation == 'randint':
-            entry.insert(0, random.randint(f_num, s_num))
+            eq = (random.randint(f_num, s_num))
     else:
         if operation == '√':
-            entry.insert(0, math.sqrt(f_num))
+            eq = (math.sqrt(f_num))
         if operation == 'exp':
-            entry.insert(0, math.exp(f_num))
+            eq = (math.exp(f_num))
         # trigonometry |
         if operation == 'sin':
-            entry.insert(0, math.sin(f_num))
+            eq = (math.sin(f_num))
         if operation == 'cos':
-            entry.insert(0, math.cos(f_num))
+            eq = (math.cos(f_num))
         if operation == 'tan':
-            entry.insert(0, math.tan(f_num))
+            eq = (math.tan(f_num))
         if operation == 'abs':
-            entry.insert(0, abs(f_num))
+            eq = (abs(f_num))
         if operation == 'fact':
-            entry.insert(0, math.factorial(f_num))
+            eq = (math.factorial(f_num))
+    entry.insert(0, eq)
 
 
 def op(oper):
