@@ -1,9 +1,10 @@
 # imports
 from tkinter import *
 import math
+import random
 
 # operation settings
-multiple_numbers = ['+', '-', '*', '/', '^']
+multiple_numbers = ['+', '-', '*', '/', '^', 'randint']
 
 # window
 root = Tk()
@@ -45,6 +46,8 @@ def button_equal(event=None):
             entry.insert(0, f_num - s_num)
         if operation == '^':
             entry.insert(0, pow(f_num, s_num))
+        if operation == 'randint':
+            entry.insert(0, random.randint(f_num, s_num))
     else:
         if operation == '√':
             entry.insert(0, math.sqrt(f_num))
@@ -167,6 +170,9 @@ abs_b = Button(button_frame, text="|X|", padx=padx_oper, pady=pady_oper, command
 fac_b = Button(button_frame, text="!n", padx=padx_oper, pady=pady_oper, command=lambda: op('fact'), relief=FLAT,
                height=button_height
                , width=button_width)
+rad_b = Button(button_frame, text="randint", padx=padx_oper, pady=pady_oper, command=lambda: op('randint'), relief=FLAT,
+               height=button_height
+               , width=button_width)
 clear_b = Button(button_frame, text="clear", padx=padx_oper, pady=pady_oper, command=lambda: button_clear(),
                  relief=FLAT,
                  height=button_height
@@ -186,6 +192,7 @@ cos_b.grid(row=2, column=0)
 tan_b.grid(row=3, column=0)
 abs_b.grid(row=0, column=3)
 fac_b.grid(row=0, column=2)
+rad_b.grid(row=4, column=0)
 clear_b.grid(row=4, column=3)
 
 # creating & placing the calculations bar
