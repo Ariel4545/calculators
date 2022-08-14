@@ -59,6 +59,8 @@ def button_equal(event=None):
             entry.insert(0, math.tan(f_num))
         if operation == 'abs':
             entry.insert(0, abs(f_num))
+        if operation == 'fact':
+            entry.insert(0, math.factorial(f_num))
 
 
 def op(oper):
@@ -162,6 +164,9 @@ tan_b = Button(button_frame, text="tan", padx=padx_oper, pady=pady_oper, command
 abs_b = Button(button_frame, text="|X|", padx=padx_oper, pady=pady_oper, command=lambda: op('abs'), relief=FLAT,
                height=button_height
                , width=button_width)
+fac_b = Button(button_frame, text="!n", padx=padx_oper, pady=pady_oper, command=lambda: op('fact'), relief=FLAT,
+               height=button_height
+               , width=button_width)
 clear_b = Button(button_frame, text="clear", padx=padx_oper, pady=pady_oper, command=lambda: button_clear(),
                  relief=FLAT,
                  height=button_height
@@ -180,6 +185,7 @@ sin_b.grid(row=1, column=0)
 cos_b.grid(row=2, column=0)
 tan_b.grid(row=3, column=0)
 abs_b.grid(row=0, column=3)
+fac_b.grid(row=0, column=2)
 clear_b.grid(row=4, column=3)
 
 # creating & placing the calculations bar
