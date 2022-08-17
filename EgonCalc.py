@@ -3,7 +3,7 @@ from tkinter import *
 
 # window
 root = Tk()
-width = 350
+width = 340
 height = 430
 screen_width = root.winfo_width()
 screen_height = root.winfo_height()
@@ -13,6 +13,8 @@ root.geometry(f'{width}x{height}+{placement_x}+{placement_y}')
 root.title("Egon calculator")
 root.resizable(False, False)
 root.configure(bg='white')
+operation_color = '#e0e0e0'
+equal_color = '#d5eaf2'
 
 
 def button_click(number):
@@ -123,22 +125,22 @@ b0.grid(row=4, column=0)
 padx_oper = padx_b
 pady_oper = pady_b
 equal_b = Button(button_frame, text="=", padx=padx_oper, pady=pady_oper, command=lambda: button_equal(), relief=FLAT,
-                 height=button_height
+                 height=button_height, bg=equal_color
                  , width=button_width)
 add_b = Button(button_frame, text="+", padx=padx_oper, pady=pady_oper, command=lambda: button_add(), relief=FLAT,
-               height=button_height
+               height=button_height, bg=operation_color
                , width=button_width)
 sub_b = Button(button_frame, text="-", padx=padx_oper, pady=pady_oper, command=lambda: button_sub(), relief=FLAT,
-               height=button_height
+               height=button_height, bg=operation_color
                , width=button_width)
 mul_b = Button(button_frame, text="*", padx=padx_oper, pady=pady_oper, command=lambda: button_mul(), relief=FLAT,
-               height=button_height
+               height=button_height, bg=operation_color
                , width=button_width)
 div_b = Button(button_frame, text="/", padx=padx_oper, pady=pady_oper, command=lambda: button_div(), relief=FLAT,
-               height=button_height
+               height=button_height, bg=operation_color
                , width=button_width)
 clear_b = Button(button_frame, text="X", padx=padx_oper, pady=pady_oper, command=lambda: button_clear(), relief=FLAT,
-                 height=button_height
+                 height=button_height, bg=operation_color
                  , width=button_width)
 
 # placing operations buttons
@@ -157,4 +159,3 @@ entry.grid(row=0, column=0, columnspan=4, sticky=N)
 root.bind('<c>', button_clear)
 
 root.mainloop()
-
