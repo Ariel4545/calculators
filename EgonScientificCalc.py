@@ -20,7 +20,8 @@ root.resizable(False, False)
 root.configure(bg='white')
 operation_color = '#ededed'
 equal_color = 'light blue'
-
+logo = PhotoImage(file='Logo.png')
+root.iconphoto(False, logo)
 
 def button_click(number):
     current = entry.get()
