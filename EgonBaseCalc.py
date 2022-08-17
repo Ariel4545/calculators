@@ -13,7 +13,8 @@ root.geometry(f'{width}x{height}+{placement_x}+{placement_y}')
 root.title('Egon Base calculator')
 root.resizable(False, False)
 root.configure(bg='white')
-
+logo = PhotoImage(file='Logo.png')
+root.iconphoto(False, logo)
 base = ['decimal']
 
 
@@ -356,4 +357,3 @@ root.bind('<c>', button_clear)
 
 base_settings()
 root.mainloop()
-
