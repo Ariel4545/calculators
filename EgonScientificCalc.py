@@ -23,6 +23,7 @@ equal_color = 'light blue'
 logo = PhotoImage(file='Logo.png')
 root.iconphoto(False, logo)
 
+
 def button_click(number):
     current = entry.get()
     entry.delete(0, END)
@@ -66,6 +67,7 @@ def button_equal(event=None):
             eq = (abs(f_num))
         if operation == 'fact':
             eq = (math.factorial(f_num))
+
     entry.insert(0, eq)
 
 
@@ -204,5 +206,6 @@ entry.grid(row=0, column=0, columnspan=1, sticky=N)
 
 # shortcuts
 root.bind('<c>', button_clear)
+root.bind('<Escape>', lambda event: root.quit())
 
 root.mainloop()
