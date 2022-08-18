@@ -3,7 +3,7 @@ from tkinter import *
 
 # window
 root = Tk()
-width = 400
+width = 370
 height = 530
 screen_width = root.winfo_width()
 screen_height = root.winfo_height()
@@ -15,6 +15,7 @@ root.resizable(False, False)
 root.configure(bg='white')
 logo = PhotoImage(file='Logo.png')
 root.iconphoto(False, logo)
+operation_color = '#e0e0e0'
 base = ['decimal']
 
 
@@ -216,7 +217,7 @@ def convert(fromBase, toBase):
 
 
 # creating button frame
-button_frame = Frame(root, padx=20)
+button_frame = Frame(root, )
 button_frame.grid(row=1)
 # creating numerical buttons
 padx_b = 2
@@ -254,16 +255,16 @@ b0 = Button(button_frame, text="0", command=lambda: button_click(0), padx=padx_b
             height=button_height
             , width=button_width)
 
-bA = Button(button_frame, text="A", command=lambda: button_click("A"), padx=padx_b, pady=pady_b, relief=FLAT,
+bA = Button(button_frame, text="A", command=lambda: button_click("A"), relief=FLAT,
             height=button_height
             , width=button_width)
-bB = Button(button_frame, text="B", command=lambda: button_click("B"), padx=padx_b, pady=pady_b, relief=FLAT,
+bB = Button(button_frame, text="B", command=lambda: button_click("B"), relief=FLAT,
             height=button_height
             , width=button_width)
-bC = Button(button_frame, text="C", command=lambda: button_click("C"), padx=padx_b, pady=pady_b, relief=FLAT,
+bC = Button(button_frame, text="C", command=lambda: button_click("C"), relief=FLAT,
             height=button_height
             , width=button_width)
-bD = Button(button_frame, text="D", command=lambda: button_click("D"), padx=padx_b, pady=pady_b, relief=FLAT,
+bD = Button(button_frame, text="D", command=lambda: button_click("D"), relief=FLAT,
             height=button_height
             , width=button_width)
 bE = Button(button_frame, text="E", command=lambda: button_click("E"), padx=padx_b, pady=pady_b, relief=FLAT,
@@ -286,14 +287,14 @@ b7.grid(row=3, column=1)
 b8.grid(row=3, column=2)
 b9.grid(row=3, column=3)
 
-b0.grid(row=4, column=1)
+b0.grid(row=4, column=3)
 
 bA.grid(row=1, column=0)
 bB.grid(row=2, column=0)
 bC.grid(row=3, column=0)
 bD.grid(row=4, column=0)
-bE.grid(row=5, column=0)
-bF.grid(row=6, column=0)
+bE.grid(row=4, column=1)
+bF.grid(row=4, column=2)
 
 # creating operations buttons
 padx_oper = padx_b
@@ -302,51 +303,50 @@ equal_b = Button(button_frame, text="=", padx=padx_oper, pady=pady_oper, command
                  height=button_height
                  , width=button_width)
 add_b = Button(button_frame, text="+", padx=padx_oper, pady=pady_oper, command=lambda: button_add(), relief=FLAT,
-               height=button_height
+               height=button_height, bg=operation_color
                , width=button_width)
 sub_b = Button(button_frame, text="-", padx=padx_oper, pady=pady_oper, command=lambda: button_sub(), relief=FLAT,
-               height=button_height
+               height=button_height, bg=operation_color
                , width=button_width)
 mul_b = Button(button_frame, text="*", padx=padx_oper, pady=pady_oper, command=lambda: button_mul(), relief=FLAT,
-               height=button_height
+               height=button_height, bg=operation_color
                , width=button_width)
 div_b = Button(button_frame, text="/", padx=padx_oper, pady=pady_oper, command=lambda: button_div(), relief=FLAT,
-               height=button_height
+               height=button_height, bg=operation_color
                , width=button_width)
 clear_b = Button(button_frame, text="X", padx=padx_oper, pady=pady_oper, command=lambda: button_clear(), relief=FLAT,
-                 height=button_height
+                 height=button_height, bg=operation_color
                  , width=button_width)
-decimal_button = Button(button_frame, text="DEC", padx=padx_oper, pady=pady_oper, command=lambda: base_settings(),
+decimal_button = Button(button_frame, text="DEC", command=lambda: base_settings(),
                         relief=FLAT,
-                        height=button_height
+                        height=button_height, bg=operation_color
                         , width=button_width)
 binary_button = Button(button_frame, text="BIN", padx=padx_oper, pady=pady_oper, command=lambda: base_settings(
     'binary'),
                        relief=FLAT,
-                       height=button_height
+                       height=button_height, bg=operation_color
                        , width=button_width)
 octal_button = Button(button_frame, text="OCT", padx=padx_oper, pady=pady_oper, command=lambda: base_settings(
     'octal'),
                       relief=FLAT,
-                      height=button_height
+                      height=button_height, bg=operation_color
                       , width=button_width)
 hexadecimal_button = Button(button_frame, text="HEX", padx=padx_oper, pady=pady_oper, command=lambda: base_settings(
     'hexadecimal'),
                             relief=FLAT,
-                            height=button_height
+                            height=button_height, bg=operation_color
                             , width=button_width)
 
 # placing operations buttons
-equal_b.grid(row=4, column=2)
 add_b.grid(row=1, column=4)
 sub_b.grid(row=2, column=4)
 mul_b.grid(row=3, column=4)
 div_b.grid(row=4, column=4)
-clear_b.grid(row=4, column=3)
-decimal_button.grid(row=5, column=1)
-binary_button.grid(row=5, column=2)
-octal_button.grid(row=5, column=3)
-hexadecimal_button.grid(row=5, column=4)
+clear_b.grid(row=5, column=4)
+decimal_button.grid(row=5, column=0)
+binary_button.grid(row=5, column=1)
+octal_button.grid(row=5, column=2)
+hexadecimal_button.grid(row=5, column=3)
 
 # creating & placing the calculations bar
 entry = Entry(root, borderwidth=2, width=40, justify=CENTER, state='normal')
@@ -354,6 +354,9 @@ entry.grid(row=0, column=0, columnspan=4, sticky=N)
 
 # shortcuts
 root.bind('<c>', button_clear)
+root.bind('<e>', lambda event: button_equal())
 
-base_settings()
+if __name__ == '__main__':
+    base_settings()
+
 root.mainloop()
