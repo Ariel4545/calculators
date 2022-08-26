@@ -159,6 +159,8 @@ entry.grid(row=0, column=0, columnspan=4, sticky=N)
 
 # shortcuts
 root.bind('<c>', button_clear)
+root.bind('<e>', lambda event: button_equal())
+# root.bind('<1>', lambda event: button_click(1))
 root.bind('<Escape>', lambda event: root.quit())
 
 root.mainloop()
