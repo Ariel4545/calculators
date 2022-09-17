@@ -1,5 +1,6 @@
 # imports
 from tkinter import *
+from tkinter import messagebox
 import math
 import random
 
@@ -9,7 +10,7 @@ multiple_numbers = ['+', '-', '*', '/', '^', 'randint']
 # window
 root = Tk()
 width = 400
-height = 550
+height = 540
 screen_width = root.winfo_width()
 screen_height = root.winfo_height()
 placement_x = abs((screen_width // 2) - (width // 2))
@@ -79,6 +80,55 @@ def op(oper):
     entry.delete(0, END)
     operation = oper
 
+
+def settings(event=None):
+    # window
+    settings_root = Toplevel()
+    settings_root.resizable()
+    # text and buttons
+    settings_text = Label(settings_root, text='Settings', font='arial 14 bold')
+    size_text = Label(settings_root, text='Size settings:', font=('arial 10 underline'), pady=5)
+    size_small = Button(settings_root, text='Small')
+    size_normal = Button(settings_root, text='Medium')
+    size_big = Button(settings_root, text='Big')
+    settings_text.grid(row=0)
+    size_text.grid(row=1)
+    size_small.grid(row=2, column=0)
+    size_normal.grid(row=2, column=1)
+    size_big.grid(row=2, column=2)
+
+    def size():
+        global padx_b, pady_b
+        for i in b_list:
+            i.config(width=button_width, height=button_height)
+        root.geometry(f'{width}x{height}')
+
+    def small():
+        global button_height, button_width
+        global width, height
+        button_height, button_width = 3, 6
+        size_small.config(bg='grey'), size_normal.config(bg='white'), size_big.config(bg='white')
+        width, height = 260, 320
+        size()
+
+    def medium():
+        global button_height, button_width
+        global width, height
+        button_height, button_width = 6, 10
+        width, height = 400, 540
+        size_small.config(bg='white'), size_normal.config(bg='grey'), size_big.config(bg='white')
+        size()
+
+    def big():
+        global button_height, button_width
+        global width, height
+        button_height, button_width = 9, 12
+        width, height = 470, 740
+        size_small.config(bg='white'), size_normal.config(bg='white'), size_big.config(bg='grey')
+        size()
+
+    size_small.config(command=small), size_normal.config(command=medium), size_big.config(command=big)
+    medium()
 
 button_frame = Frame(root, padx=0)
 button_frame.grid(row=1)
@@ -182,6 +232,9 @@ clear_b = Button(button_frame, text="clear", padx=padx_oper, pady=pady_oper, com
                  relief=FLAT,
                  height=button_height
                  , width=button_width)
+b_list = [b1, b2, b3, b4, b5, b5, b6, b7, b8, b9, b0,
+          equal_b, add_b, sub_b, mul_b, div_b,  power_b, sqrt_b, exp_b, sin_b, cos_b, tan_b, abs_b, fac_b,
+          rad_b, clear_b]
 
 # placing operations buttons
 equal_b.grid(row=4, column=2)
@@ -208,5 +261,7 @@ entry.grid(row=0, column=0, columnspan=1, sticky=N)
 root.bind('<c>', button_clear)
 root.bind('<e>', lambda event: button_equal())
 root.bind('<Escape>', lambda event: root.quit())
+root.bind('<s>', settings)
 
+messagebox.showinfo('Tip', 'for the settings to pop up press s')
 root.mainloop()
