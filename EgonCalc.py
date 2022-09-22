@@ -84,21 +84,28 @@ def settings(event=None):
     # window
     settings_root = Toplevel()
     settings_root.resizable()
-    # text and buttons
     settings_text = Label(settings_root, text='Settings', font='arial 14 bold')
-    size_text = Label(settings_root, text='Size settings:',font=('arial 10 underline'), pady=5)
+    settings_text.grid(row=0)
+    # text and buttons for sizes
+    size_text = Label(settings_root, text='Size settings:',font='arial 10 underline', pady=5)
     size_small = Button(settings_root, text='Small')
     size_normal = Button(settings_root, text='Medium')
     size_big = Button(settings_root, text='Big')
-    settings_text.grid(row=0)
     size_text.grid(row=1)
     size_small.grid(row=2, column=0)
     size_normal.grid(row=2, column=1)
     size_big.grid(row=2, column=2)
+    # text and buttons for themes
+    theme_text = Label(settings_root, text='Theme settings:', font='arial 10 underline', pady=5)
+    theme_light = Button(settings_root, text='light theme')
+    theme_dark = Button(settings_root, text='Dracula theme')
+    theme_text.grid(row=3)
+    theme_light.grid(row=4, column=0)
+    theme_dark.grid(row=4, column=2)
 
     def size():
         global padx_b,  pady_b
-        for i in b_list:
+        for i in f_list:
             i.config(padx=padx_b, pady=pady_b)
         root.geometry(f'{width}x{height}')
 
@@ -128,6 +135,27 @@ def settings(event=None):
 
     size_small.config(command=small), size_normal.config(command=medium), size_big.config(command=big)
     small()
+
+    def dark_theme():
+        theme_dark.config(bg='grey'), theme_light.config(bg='white')
+        for i in n_list:
+            i.config(bg='grey')
+        for i in b_list:
+            i.config(bg='dark grey')
+        equal_b.config(bg='light blue')
+        entry.config(bg='#373737', foreground='green')
+
+    def light_theme():
+        theme_dark.config(bg='white'), theme_light.config(bg='grey')
+        for i in n_list:
+            i.config(bg='SystemButtonFace')
+        for i in b_list:
+            i.config(bg=operation_color)
+        equal_b.config(bg=equal_color)
+        entry.config(bg='white', foreground='black')
+
+    theme_dark.config(command=dark_theme), theme_light.config(command=light_theme)
+    light_theme()
 
 
 button_frame = Frame(root, padx=20)
@@ -168,7 +196,7 @@ b0 = Button(button_frame, text="0", command=lambda: button_click(0), padx=padx_b
             height=button_height
             , width=button_width)
 
-b_list = [b1, b2, b3, b4, b4, b5, b6, b7, b8, b9]
+n_list = [b0, b1, b2, b3, b4, b4, b5, b6, b7, b8, b9]
 
 # placing numerical buttons
 b1.grid(row=1, column=0)
@@ -206,7 +234,8 @@ div_b = Button(button_frame, text="/", padx=padx_oper, pady=pady_oper, command=l
 clear_b = Button(button_frame, text="X", padx=padx_oper, pady=pady_oper, command=lambda: button_clear(), relief=FLAT,
                  height=button_height, bg=operation_color
                  , width=button_width)
-b_list += equal_b, add_b, sub_b, mul_b, div_b, clear_b
+b_list = [equal_b, add_b, sub_b, mul_b, div_b, clear_b]
+f_list = n_list + b_list
 # placing operations buttons
 equal_b.grid(row=4, column=1)
 add_b.grid(row=1, column=4)
@@ -228,5 +257,3 @@ root.bind('<s>', settings)
 
 tkinter.messagebox.showinfo('Tip', 'for the settings to pop up press s')
 root.mainloop()
-
-# bug fixes + settings (size)
