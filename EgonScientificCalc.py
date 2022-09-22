@@ -85,7 +85,7 @@ def settings(event=None):
     # window
     settings_root = Toplevel()
     settings_root.resizable()
-    # text and buttons
+    # text and buttons for sizes
     settings_text = Label(settings_root, text='Settings', font='arial 14 bold')
     size_text = Label(settings_root, text='Size settings:', font=('arial 10 underline'), pady=5)
     size_small = Button(settings_root, text='Small')
@@ -96,6 +96,13 @@ def settings(event=None):
     size_small.grid(row=2, column=0)
     size_normal.grid(row=2, column=1)
     size_big.grid(row=2, column=2)
+    # text and buttons for themes
+    theme_text = Label(settings_root, text='Theme settings:', font='arial 10 underline', pady=5)
+    theme_light = Button(settings_root, text='light theme')
+    theme_dark = Button(settings_root, text='Dracula theme')
+    theme_text.grid(row=3)
+    theme_light.grid(row=4, column=0)
+    theme_dark.grid(row=4, column=2)
 
     def size():
         global padx_b, pady_b
@@ -129,6 +136,28 @@ def settings(event=None):
 
     size_small.config(command=small), size_normal.config(command=medium), size_big.config(command=big)
     medium()
+
+    def dark_theme():
+        theme_dark.config(bg='grey'), theme_light.config(bg='white')
+        for i in n_list:
+            i.config(bg='grey')
+        for i in b_list:
+            i.config(bg='dark grey')
+        equal_b.config(bg='light blue')
+        entry.config(bg='#373737', foreground='green')
+
+    def light_theme():
+        theme_dark.config(bg='white'), theme_light.config(bg='grey')
+        for i in n_list:
+            i.config(bg='SystemButtonFace')
+        for i in b_list:
+            i.config(bg=operation_color)
+        equal_b.config(bg=equal_color)
+        entry.config(bg='white', foreground='black')
+
+    theme_dark.config(command=dark_theme), theme_light.config(command=light_theme)
+    light_theme()
+
 
 button_frame = Frame(root, padx=0)
 button_frame.grid(row=1)
@@ -232,9 +261,10 @@ clear_b = Button(button_frame, text="clear", padx=padx_oper, pady=pady_oper, com
                  relief=FLAT,
                  height=button_height
                  , width=button_width)
-b_list = [b1, b2, b3, b4, b5, b5, b6, b7, b8, b9, b0,
-          equal_b, add_b, sub_b, mul_b, div_b,  power_b, sqrt_b, exp_b, sin_b, cos_b, tan_b, abs_b, fac_b,
+n_list = [b1, b2, b3, b4, b5, b5, b6, b7, b8, b9, b0]
+b_list = [equal_b, add_b, sub_b, mul_b, div_b,  power_b, sqrt_b, exp_b, sin_b, cos_b, tan_b, abs_b, fac_b,
           rad_b, clear_b]
+f_list = n_list + b_list
 
 # placing operations buttons
 equal_b.grid(row=4, column=2)
