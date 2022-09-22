@@ -106,7 +106,7 @@ def settings(event=None):
 
     def size():
         global padx_b, pady_b
-        for i in b_list:
+        for i in f_list:
             i.config(width=button_width, height=button_height)
         root.geometry(f'{width}x{height}')
 
