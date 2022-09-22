@@ -106,7 +106,6 @@ def base_settings(mode='decimal'):
         bF.configure(state='disabled')
         convert(last_base, 'decimal')
 
-
     elif mode == 'binary':
         b1.configure(state='normal')
         b2.configure(state='disabled')
@@ -130,7 +129,6 @@ def base_settings(mode='decimal'):
         mul_b.configure(state='disabled')
         div_b.configure(state='disabled')
         convert(last_base, 'binary')
-
 
     elif mode == 'octal':
         b1.configure(state='normal')
@@ -221,7 +219,7 @@ def settings(event=None):
     # window
     settings_root = Toplevel()
     settings_root.resizable()
-    # text and buttons
+    # text and buttons for sizes
     settings_text = Label(settings_root, text='Settings', font='arial 14 bold')
     size_text = Label(settings_root, text='Size settings:', font=('arial 10 underline'), pady=5)
     size_small = Button(settings_root, text='Small')
@@ -232,6 +230,13 @@ def settings(event=None):
     size_small.grid(row=2, column=0)
     size_normal.grid(row=2, column=1)
     size_big.grid(row=2, column=2)
+    # text and buttons for themes
+    theme_text = Label(settings_root, text='Theme settings:', font='arial 10 underline', pady=5)
+    theme_light = Button(settings_root, text='light theme')
+    theme_dark = Button(settings_root, text='Dracula theme')
+    theme_text.grid(row=3)
+    theme_light.grid(row=4, column=0)
+    theme_dark.grid(row=4, column=2)
 
     def size():
         global padx_b, pady_b
@@ -265,6 +270,25 @@ def settings(event=None):
 
     size_small.config(command=small), size_normal.config(command=medium), size_big.config(command=big)
     medium()
+
+    def dark_theme():
+        theme_dark.config(bg='grey'), theme_light.config(bg='white')
+        for i in n_list:
+            i.config(bg='grey')
+        for i in b_list:
+            i.config(bg='dark grey')
+        entry.config(bg='#373737', foreground='green')
+
+    def light_theme():
+        theme_dark.config(bg='white'), theme_light.config(bg='grey')
+        for i in n_list:
+            i.config(bg='SystemButtonFace')
+        for i in b_list:
+            i.config(bg=operation_color)
+        entry.config(bg='white', foreground='black')
+
+    theme_dark.config(command=dark_theme), theme_light.config(command=light_theme)
+    light_theme()
 
 
 # creating button frame
@@ -306,16 +330,16 @@ b0 = Button(button_frame, text="0", command=lambda: button_click(0), padx=padx_b
             height=button_height
             , width=button_width)
 
-bA = Button(button_frame, text="A", command=lambda: button_click("A"), relief=FLAT,
+bA = Button(button_frame, text="A", command=lambda: button_click("A"), relief=FLAT, padx=padx_b, pady=pady_b,
             height=button_height
             , width=button_width)
-bB = Button(button_frame, text="B", command=lambda: button_click("B"), relief=FLAT,
+bB = Button(button_frame, text="B", command=lambda: button_click("B"), relief=FLAT, padx=padx_b, pady=pady_b,
             height=button_height
             , width=button_width)
-bC = Button(button_frame, text="C", command=lambda: button_click("C"), relief=FLAT,
+bC = Button(button_frame, text="C", command=lambda: button_click("C"), relief=FLAT, padx=padx_b, pady=pady_b,
             height=button_height
             , width=button_width)
-bD = Button(button_frame, text="D", command=lambda: button_click("D"), relief=FLAT,
+bD = Button(button_frame, text="D", command=lambda: button_click("D"), relief=FLAT, padx=padx_b, pady=pady_b,
             height=button_height
             , width=button_width)
 bE = Button(button_frame, text="E", command=lambda: button_click("E"), padx=padx_b, pady=pady_b, relief=FLAT,
@@ -369,7 +393,7 @@ clear_b = Button(button_frame, text="X", padx=padx_oper, pady=pady_oper, command
                  height=button_height, bg=operation_color
                  , width=button_width)
 decimal_button = Button(button_frame, text="DEC", command=lambda: base_settings(),
-                        relief=FLAT,
+                        relief=FLAT, padx=padx_b, pady=pady_b,
                         height=button_height, bg=operation_color
                         , width=button_width)
 binary_button = Button(button_frame, text="BIN", padx=padx_oper, pady=pady_oper, command=lambda: base_settings(
@@ -388,8 +412,9 @@ hexadecimal_button = Button(button_frame, text="HEX", padx=padx_oper, pady=pady_
                             height=button_height, bg=operation_color
                             , width=button_width)
 
-b_list = [b1, b2, b3, b4, b5, b5, b6, b7, b8, b9, b0, bA, bB, bC, bD, bE, bF,
-          equal_b, add_b, sub_b, mul_b, div_b, decimal_button, binary_button, octal_button, hexadecimal_button, clear_b]
+n_list = [b1, b2, b3, b4, b5, b5, b6, b7, b8, b9, b0, bA, bB, bC, bD, bE, bF]
+b_list = [equal_b, add_b, sub_b, mul_b, div_b, decimal_button, binary_button, octal_button, hexadecimal_button, clear_b]
+f_list = n_list + b_list
 # placing operations buttons
 add_b.grid(row=1, column=4)
 sub_b.grid(row=2, column=4)
