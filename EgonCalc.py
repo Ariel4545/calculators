@@ -249,11 +249,12 @@ entry = Entry(root, borderwidth=2, width=40, justify=CENTER, state='normal')
 entry.grid(row=0, column=0, columnspan=4, sticky=N)
 
 # shortcuts
-root.bind('<c>', button_clear)
-root.bind('<e>', lambda event: button_equal())
+root.bind('<Key-c>', button_clear)
+root.bind('<Key-e>', lambda event: button_equal())
 # root.bind('<1>', lambda event: button_click(1))
 root.bind('<Escape>', lambda event: root.quit())
-root.bind('<s>', settings)
+root.bind('<Key-s>', settings)
 
 tkinter.messagebox.showinfo('Tip', 'for the settings to pop up press s')
 root.mainloop()
+
