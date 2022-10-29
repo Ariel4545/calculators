@@ -10,6 +10,8 @@ I came up with many approches and slowly they become more efficient
 2. number bases calculator (remaster also available)
 3. scientific calculator (remaster also available)
 
+![EC-preview](https://user-images.githubusercontent.com/95249974/198843916-a0348631-d197-49d0-9ad3-386d79ad5220.png)
+
 ## tested on
 <img src="https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white" />
 
