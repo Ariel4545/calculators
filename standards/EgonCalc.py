@@ -16,8 +16,11 @@ root.resizable(False, False)
 root.configure(bg='white')
 operation_color = '#e0e0e0'
 equal_color = '#d5eaf2'
-logo = PhotoImage(file='Logo.png')
-root.iconphoto(False, logo)
+try:
+    logo = PhotoImage(file='Logo.png')
+    root.iconphoto(False, logo)
+except BaseException:
+    pass
 
 
 def button_click(number):
