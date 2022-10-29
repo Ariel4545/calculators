@@ -6,9 +6,9 @@ everyone is used diffrent approch to do it's job,
 I came up with many approches and slowly they become more efficient
 
 ## Avaliable 🖩 :
-1. simple egon calculator 
-2. base egon calculator 
-3. scientific egon calculator 
+1. basic calculator (remaster also available)
+2. number bases calculator (remaster also available)
+3. scientific calculator (remaster also available)
 
 ## tested on
 <img src="https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white" />
