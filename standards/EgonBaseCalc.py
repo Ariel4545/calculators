@@ -14,8 +14,11 @@ root.geometry(f'{width}x{height}+{placement_x}+{placement_y}')
 root.title('Egon Base calculator')
 root.resizable(False, False)
 root.configure(bg='white')
-logo = PhotoImage(file='Logo.png')
-root.iconphoto(False, logo)
+try:
+    logo = PhotoImage(file='Logo.png')
+    root.iconphoto(False, logo)
+except BaseException:
+    pass
 operation_color = '#e0e0e0'
 base = ['decimal']
 
