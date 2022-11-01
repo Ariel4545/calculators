@@ -41,7 +41,10 @@ def button_equal(event=None):
     if operation == '*':
         entry.insert(0, f_num * s_num)
     if operation == '/':
-        entry.insert(0, f_num / s_num)
+        try:
+            entry.insert(0, f_num / s_num)
+        except ZeroDivisionError:
+            messagebox.showerror('Error', 'Divided by zero')
     if operation == '-':
         entry.insert(0, f_num - s_num)
 
