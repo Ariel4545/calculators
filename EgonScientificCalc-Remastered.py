@@ -47,7 +47,10 @@ def button_equal(event=None):
         if operation == '*':
             eq = (f_num * s_num)
         if operation == '/':
-            eq = (f_num / s_num)
+            try:
+                eq = (f_num / s_num)
+            except ZeroDivisionError:
+                messagebox.showerror('Error', 'Divided by zero')
         if operation == '-':
             eq = (f_num - s_num)
         if operation == '^':
@@ -70,8 +73,10 @@ def button_equal(event=None):
             eq = (abs(f_num))
         if operation == 'fact':
             eq = (math.factorial(f_num))
-
-    entry.insert(0, eq)
+    try:
+        entry.insert(0, eq)
+    except:
+        pass
 
 
 def op(oper):
