@@ -46,7 +46,10 @@ def button_equal(event=None):
     if operation == '*':
         entry.insert(0, f_num * s_num)
     if operation == '/':
-        entry.insert(0, f_num / s_num)
+        try:
+            entry.insert(0, f_num / s_num)
+        except ZeroDivisionError:
+            tkinter.messagebox.showerror('Error', 'Divided by zero')
     if operation == '-':
         entry.insert(0, f_num - s_num)
 
@@ -267,7 +270,7 @@ entry.grid(row=0, column=0, sticky=N)
 # shortcuts
 root.bind('<Key-c>', button_clear)
 root.bind('<Key-e>', lambda event: button_equal())
-# root.bind('<1>', lambda event: button_click(1))
+#root.bind('<1>', lambda event: button_click(1))
 root.bind('<Escape>', lambda event: root.quit())
 root.bind('<Key-s>', lambda event: settings())
 root.bind('<Key-S>', lambda event: settings())
