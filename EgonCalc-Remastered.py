@@ -7,8 +7,8 @@ from tkinter import *
 
 # window
 root = CTk()
-width = 340
-height = 430
+width = 320
+height = 460
 screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
 placement_x = round((screen_width // 2) - (width // 2))
@@ -20,6 +20,8 @@ root.configure(bg='white')
 operation_color = '#e0e0e0'
 equal_color = '#d5eaf2'
 customtkinter.set_appearance_mode('light')
+total_exp = ''
+
 # logo = PhotoImage(file='Logo.png')
 # root.iconphoto(False, logo)
 
@@ -35,7 +37,9 @@ def button_clear(event=None):
 
 
 def button_equal(event=None):
+    global total_exp
     second_number = entry.get()
+    total_exp += second_number
     entry.delete(0, END)
     try:
         s_num = int(second_number)
@@ -52,17 +56,20 @@ def button_equal(event=None):
             tkinter.messagebox.showerror('Error', 'Divided by zero')
     if operation == '-':
         entry.insert(0, f_num - s_num)
-
+    total_exp_entry.configure(text=total_exp)
+    total_exp.replace(total_exp, '')
 
 def button_add():
     first_number = entry.get()
     global f_num
     global operation
+    global total_exp
     try:
         f_num = int(first_number)
     except ValueError:
         pass
     operation = '+'
+    total_exp = f'{f_num} {operation}'
     entry.delete(0, END)
 
 
@@ -70,8 +77,10 @@ def button_sub():
     first_number = entry.get()
     global f_num
     global operation
+    global total_exp
     f_num = int(first_number)
     operation = '-'
+    total_exp = f'{f_num} {operation}'
     entry.delete(0, END)
 
 
@@ -79,8 +88,10 @@ def button_mul():
     first_number = entry.get()
     global f_num
     global operation
+    global total_exp
     f_num = int(first_number)
     operation = '*'
+    total_exp = f'{f_num} {operation}'
     entry.delete(0, END)
 
 
@@ -88,10 +99,38 @@ def button_div():
     first_number = entry.get()
     global f_num
     global operation
+    global total_exp
     f_num = int(first_number)
     operation = '/'
+    total_exp = f'{f_num} {operation}'
     entry.delete(0, END)
 
+
+equation = StringVar()
+expression = ''
+
+
+def aio_clac(num):
+    global expression
+    expression = expression + str(num)
+    equation.set(expression)
+
+
+def equalpress():
+    try:
+        global expression
+        total = str(eval(expression))
+        equation.set(total)
+        total_exp_entry.configure(text=expression)
+        expression = total
+    except:
+        equation.set(" error ")
+        expression = ""
+
+def aio_clear():
+    global expression
+    expression = ""
+    equation.set("")
 
 def settings(event=None):
     # window
@@ -101,31 +140,31 @@ def settings(event=None):
     btn_width = 5
 
     def size():
-        global padx_b,  pady_b
+        global padx_b, pady_b
         for i in f_list:
             i.config(padx=padx_b, pady=pady_b)
         root.geometry(f'{width}x{height}')
         entry.config(width=get_entry_width())
 
     def small():
-        global padx_b,  pady_b
+        global padx_b, pady_b
         global width, height
         padx_b, pady_b = 1, 3
-        width, height = 340, 430
+        width, height = 320, 430 + 30
         size()
 
     def medium():
-        global padx_b,  pady_b
+        global padx_b, pady_b
         global width, height
         padx_b, pady_b = 2, 6
-        width, height = 355, 455
+        width, height = 355, 455 + 30
         size()
 
     def big():
-        global padx_b,  pady_b
+        global padx_b, pady_b
         global width, height
         padx_b, pady_b = 4, 12
-        width, height = 370, 500
+        width, height = 370, 500 + 30
         size()
 
     # text and buttons for sizes
@@ -137,11 +176,12 @@ def settings(event=None):
 
     def dark_theme():
         for i in n_list:
-            i.config(bg='black', foreground='dark green')
+            i.config(bg='#222623', foreground='dark green')
         for i in b_list:
             i.config(bg='#454545', fg='white')
         equal_b.config(bg='dark blue')
         entry.config(bg='#373737', foreground='green')
+        total_exp_entry.config(bg='#373737', foreground='green')
         customtkinter.set_appearance_mode('dark')
 
     def light_theme():
@@ -151,6 +191,7 @@ def settings(event=None):
             i.config(bg=operation_color, foreground='black')
         equal_b.config(bg=equal_color)
         entry.config(bg='white', foreground='black')
+        total_exp_entry.config(bg='white', foreground='black')
         customtkinter.set_appearance_mode('light')
 
     # text and buttons for themes
@@ -158,6 +199,30 @@ def settings(event=None):
     theme_light = CTkButton(settings_root, text='light theme', command=light_theme, width=btn_width)
     theme_dark = CTkButton(settings_root, text='Dracula theme', command=dark_theme, width=btn_width)
     light_theme()
+
+    def change_c(mode):
+        if mode == 'one':
+            for i in range(len(n_list)):
+                n_list[i].config(command=lambda i=i: button_click(i))
+            div_b.configure(command=button_div), mul_b.configure(command=button_mul),\
+            add_b.configure(command=button_add), sub_b.configure(command=button_sub),\
+            clear_b.configure(command=button_clear)
+            equal_b.configure(command=button_equal)
+            entry.configure(textvariable=None)
+        else:
+            for i, button in enumerate(n_list):
+                button.configure(command=lambda i=i: aio_clac(i))
+            div_b.configure(command=lambda: aio_clac('/')), mul_b.configure(command=lambda: aio_clac('*'))\
+                , add_b.configure(command=lambda: aio_clac('+')), sub_b.configure(command=lambda: aio_clac('-'))\
+                , clear_b.configure(command=aio_clear)
+            equal_b.configure(command=equalpress)
+            entry.configure(textvariable=equation)
+
+    # calculation modes
+    calculation_text = CTkLabel(settings_root, text='calculation settings:', pady=5)
+    one_at_a_time = CTkButton(settings_root, text='one at a time', command=lambda: change_c('one'), width=btn_width)
+    everything_at_once = CTkButton(settings_root, text='everything at once', command=lambda: change_c('everything')
+                                   , width=btn_width)
 
     # placing
     settings_text.grid(row=0)
@@ -169,15 +234,19 @@ def settings(event=None):
     theme_light.grid(row=4, column=0)
     theme_dark.grid(row=4, column=1)
 
+    calculation_text.grid(row=5, column=1)
+    one_at_a_time.grid(row=6, column=0)
+    everything_at_once.grid(row=6, column=2)
+
 
 def get_entry_width():
-    return (width//8) - 10
+    return (width // 8) - 10
 
 
 # frames
 entry_frame = Frame(root)
 entry_frame.pack()
-button_frame = Frame(root, padx=20)
+button_frame = Frame(root, padx=0)
 button_frame.pack(fill=X)
 # creating numerical buttons
 padx_b = 1
@@ -215,7 +284,7 @@ b0 = Button(button_frame, text="0", command=lambda: button_click(0), pady=pady_b
             height=button_height
             , width=button_width)
 
-n_list = [b0, b1, b2, b3, b4, b4, b5, b6, b7, b8, b9]
+n_list = [b0, b1, b2, b3, b4, b5, b6, b7, b8, b9]
 
 # placing numerical buttons
 b1.grid(row=1, column=0)
@@ -264,18 +333,18 @@ div_b.grid(row=4, column=4)
 clear_b.grid(row=4, column=2)
 
 # creating & placing the calculations bar
+total_exp_entry = Label(entry_frame, width=get_entry_width()//2, text=total_exp, anchor=NE, padx=10, justify=CENTER)
 entry = Entry(entry_frame, borderwidth=2, width=get_entry_width(), justify=CENTER, state='normal')
-entry.grid(row=0, column=0, sticky=N)
+total_exp_entry.pack(expand=True, fill=BOTH, anchor=N)
+entry.pack(anchor=N)
 
 # shortcuts
 root.bind('<Key-c>', button_clear)
 root.bind('<Key-e>', lambda event: button_equal())
-#root.bind('<1>', lambda event: button_click(1))
+# root.bind('<1>', lambda event: button_click(1))
 root.bind('<Escape>', lambda event: root.quit())
 root.bind('<Key-s>', lambda event: settings())
 root.bind('<Key-S>', lambda event: settings())
 
-
 tkinter.messagebox.showinfo('Tip', 'for the settings to pop up press s')
 root.mainloop()
-
