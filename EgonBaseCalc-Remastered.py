@@ -1,12 +1,13 @@
 # imports
 from tkinter import messagebox
 from tkinter import *
+import customtkinter
 from customtkinter import *
 
 # window
 root = CTk()
 width = 370
-height = 530
+height = 560
 screen_width = root.winfo_width()
 screen_height = root.winfo_height()
 placement_x = abs((screen_width // 2) - (width // 2))
@@ -20,6 +21,9 @@ root.configure(bg='white')
 operation_color = '#e0e0e0'
 base = ['decimal']
 set_appearance_mode('light')
+total_exp = ''
+operation = None
+f_num = 0
 
 def button_click(number):
     current = entry.get()
@@ -32,29 +36,43 @@ def button_clear(event=None):
 
 
 def button_equal(event=None):
+    global total_exp
+    if operation is None:
+        return
     second_number = entry.get()
+    total_exp += second_number
     entry.delete(0, END)
-    s_num = int(second_number)
-    # if base == 'decimal':
-    if operation == '+':
-        entry.insert(0, f_num + s_num)
-    if operation == '*':
-        entry.insert(0, f_num * s_num)
-    if operation == '/':
-        try:
-            entry.insert(0, f_num / s_num)
-        except ZeroDivisionError:
-            messagebox.showerror('Error', 'Divided by zero')
-    if operation == '-':
-        entry.insert(0, f_num - s_num)
+    try:
+        s_num = int(second_number)
+        # if base == 'decimal':
+        if operation == '+':
+            entry.insert(0, f_num + s_num)
+        if operation == '*':
+            entry.insert(0, f_num * s_num)
+        if operation == '/':
+            try:
+                entry.insert(0, f_num / s_num)
+            except ZeroDivisionError:
+                messagebox.showerror('Error', 'Divided by zero')
+        if operation == '-':
+            entry.insert(0, f_num - s_num)
+    except ValueError:
+        pass
+    total_exp_entry.configure(text=total_exp)
+    total_exp = ''
 
 
 def button_add():
     first_number = entry.get()
     global f_num
     global operation
-    f_num = int(first_number)
+    global total_exp
+    try:
+        f_num = int(first_number)
+    except ValueError:
+        f_num = 0
     operation = '+'
+    total_exp = f'{f_num} {operation} '
     entry.delete(0, END)
 
 
@@ -62,8 +80,13 @@ def button_sub():
     first_number = entry.get()
     global f_num
     global operation
-    f_num = int(first_number)
+    global total_exp
+    try:
+        f_num = int(first_number)
+    except ValueError:
+        f_num = 0
     operation = '-'
+    total_exp = f'{f_num} {operation} '
     entry.delete(0, END)
 
 
@@ -71,8 +94,13 @@ def button_mul():
     first_number = entry.get()
     global f_num
     global operation
-    f_num = int(first_number)
+    global total_exp
+    try:
+        f_num = int(first_number)
+    except ValueError:
+        f_num = 0
     operation = '*'
+    total_exp = f'{f_num} {operation} '
     entry.delete(0, END)
 
 
@@ -80,8 +108,13 @@ def button_div():
     first_number = entry.get()
     global f_num
     global operation
-    f_num = int(first_number)
+    global total_exp
+    try:
+        f_num = int(first_number)
+    except ValueError:
+        f_num = 0
     operation = '/'
+    total_exp = f'{f_num} {operation} '
     entry.delete(0, END)
 
 
@@ -222,76 +255,122 @@ def convert(fromBase, toBase):
 def settings(event=None):
     # window
     settings_root = CTkToplevel()
-    settings_root.title('')
-    btn_width = 5
+    settings_root.title('Settings')
+    settings_root.geometry('400x300')
+    settings_text = CTkLabel(settings_root, text='Settings', font=("Arial", 16, "bold"))
+    btn_width = 80
 
     def size():
         global padx_b, pady_b
         for i in f_list:
-            i.config(width=button_width, height=button_height)
+            i.configure(width=button_width, height=button_height)
         root.geometry(f'{width}x{height}')
-        entry.config(width=get_entry_width())
+        entry.configure(width=get_entry_width())
 
     def small():
         global button_height, button_width
         global width, height
         button_height, button_width = 3, 6
-        size_small.config(bg='grey'), size_normal.config(bg='white'), size_big.config(bg='white')
-        width, height = 270, 310
+        width, height = 270, 310 + 30
         size()
+        update_size_buttons('small')
 
     def medium():
         global button_height, button_width
         global width, height
         button_height, button_width = 6, 9
-        width, height = 370, 530
-        size_small.config(bg='white'), size_normal.config(bg='grey'), size_big.config(bg='white')
+        width, height = 370, 530 + 30
         size()
+        update_size_buttons('medium')
 
     def big():
         global button_height, button_width
         global width, height
         button_height, button_width = 9, 12
-        width, height = 470, 730
-        size_small.config(bg='white'), size_normal.config(bg='white'), size_big.config(bg='grey')
+        width, height = 470, 730 + 30
         size()
+        update_size_buttons('big')
+
+    def update_size_buttons(active_size):
+        buttons = {'small': size_small, 'medium': size_normal, 'big': size_big}
+        for name, btn in buttons.items():
+            if name == active_size:
+                btn.configure(fg_color=("#3B8ED0", "#1F6AA5"))
+            else:
+                btn.configure(fg_color=("gray75", "gray25"))
 
     def dark_theme():
-        theme_dark.config(bg='grey'), theme_light.config(bg='white')
+        # Dark Theme Colors
+        bg_color = '#1e1e1e'
+        btn_num_bg = '#333333'
+        btn_op_bg = '#4a4a4a'
+        text_color = 'white'
+        
+        root.configure(bg=bg_color)
+        entry_frame.configure(bg=bg_color)
+        button_frame.configure(bg=bg_color)
+        
         for i in n_list:
-            i.config(bg='grey')
+            i.configure(bg=btn_num_bg, fg=text_color)
         for i in b_list:
-            i.config(bg='dark grey')
-        entry.config(bg='#373737', foreground='green')
+            i.configure(bg=btn_op_bg, fg=text_color)
+        entry.configure(bg='#2b2b2b', foreground='white', insertbackground='white')
+        total_exp_entry.configure(bg=bg_color, foreground='gray')
+        
         set_appearance_mode('dark')
+        update_theme_buttons('dark')
 
     def light_theme():
-        theme_dark.config(bg='white'), theme_light.config(bg='grey')
+        # Light Theme Colors
+        bg_color = 'white'
+        
+        root.configure(bg=bg_color)
+        entry_frame.configure(bg=bg_color)
+        button_frame.configure(bg=bg_color)
+        
         for i in n_list:
-            i.config(bg='SystemButtonFace')
+            i.configure(bg='SystemButtonFace', fg='black')
         for i in b_list:
-            i.config(bg=operation_color)
-        entry.config(bg='white', foreground='black')
+            i.configure(bg=operation_color, fg='black')
+        entry.configure(bg='white', foreground='black', insertbackground='black')
+        total_exp_entry.configure(bg='white', foreground='gray')
+        
         set_appearance_mode('light')
+        update_theme_buttons('light')
+
+    def update_theme_buttons(active_theme):
+        if active_theme == 'light':
+            theme_light.configure(fg_color=("#3B8ED0", "#1F6AA5"))
+            theme_dark.configure(fg_color=("gray75", "gray25"))
+        else:
+            theme_light.configure(fg_color=("gray75", "gray25"))
+            theme_dark.configure(fg_color=("#3B8ED0", "#1F6AA5"))
 
     # text and buttons for sizes
-    settings_text = CTkLabel(settings_root, text='Settings')
+    settings_text = CTkLabel(settings_root, text='Settings', font=("Arial", 16, "bold"))
     size_text = CTkLabel(settings_root, text='Size settings:', pady=5)
     size_small = CTkButton(settings_root, text='Small', command=small, width=btn_width)
     size_normal = CTkButton(settings_root, text='Medium', command=medium, width=btn_width)
     size_big = CTkButton(settings_root, text='Big', command=big, width=btn_width)
     # text and buttons for themes
     theme_text = CTkLabel(settings_root, text='Theme settings:', pady=5)
-    theme_light = CTkButton(settings_root, text='light theme', command=light_theme, width=btn_width)
-    theme_dark = CTkButton(settings_root, text='Dracula theme', command=dark_theme, width=btn_width)
-    settings_text.grid(row=0)
-    size_text.grid(row=1)
-    size_small.grid(row=2, column=0)
-    size_normal.grid(row=2, column=1)
-    size_big.grid(row=2, column=2)
-    theme_text.grid(row=3)
-    theme_light.grid(row=4, column=0)
-    theme_dark.grid(row=4, column=2)
+    theme_light = CTkButton(settings_root, text='Light', command=light_theme, width=btn_width)
+    theme_dark = CTkButton(settings_root, text='Dark', command=dark_theme, width=btn_width)
+    
+    # Initialize button states
+    update_size_buttons('medium') # Default assumption
+    update_theme_buttons(customtkinter.get_appearance_mode().lower())
+
+    settings_text.grid(row=0, column=0, columnspan=3, pady=10)
+    
+    size_text.grid(row=1, column=0, columnspan=3)
+    size_small.grid(row=2, column=0, padx=5, pady=5)
+    size_normal.grid(row=2, column=1, padx=5, pady=5)
+    size_big.grid(row=2, column=2, padx=5, pady=5)
+    
+    theme_text.grid(row=3, column=0, columnspan=3)
+    theme_light.grid(row=4, column=0, padx=5, pady=5)
+    theme_dark.grid(row=4, column=2, padx=5, pady=5)
 
     light_theme()
     medium()
@@ -302,8 +381,11 @@ def get_entry_width():
 
 
 # creating button frame
-button_frame = Frame(root)
-button_frame.grid(row=1)
+entry_frame = Frame(root, bg='white')
+entry_frame.pack(fill=BOTH, expand=True)
+button_frame = Frame(root, padx=0, bg='white')
+button_frame.pack(fill=BOTH, expand=True)
+
 # creating numerical buttons
 padx_b = 2
 pady_b = 2
@@ -360,26 +442,26 @@ bF = Button(button_frame, text="F", command=lambda: button_click("F"), padx=padx
             , width=button_width)
 
 # placing numerical buttons
-b1.grid(row=1, column=1)
-b2.grid(row=1, column=2)
-b3.grid(row=1, column=3)
+b1.grid(row=1, column=1, sticky="nsew")
+b2.grid(row=1, column=2, sticky="nsew")
+b3.grid(row=1, column=3, sticky="nsew")
 
-b4.grid(row=2, column=1)
-b5.grid(row=2, column=2)
-b6.grid(row=2, column=3)
+b4.grid(row=2, column=1, sticky="nsew")
+b5.grid(row=2, column=2, sticky="nsew")
+b6.grid(row=2, column=3, sticky="nsew")
 
-b7.grid(row=3, column=1)
-b8.grid(row=3, column=2)
-b9.grid(row=3, column=3)
+b7.grid(row=3, column=1, sticky="nsew")
+b8.grid(row=3, column=2, sticky="nsew")
+b9.grid(row=3, column=3, sticky="nsew")
 
-b0.grid(row=4, column=3)
+b0.grid(row=4, column=3, sticky="nsew")
 
-bA.grid(row=1, column=0)
-bB.grid(row=2, column=0)
-bC.grid(row=3, column=0)
-bD.grid(row=4, column=0)
-bE.grid(row=4, column=1)
-bF.grid(row=4, column=2)
+bA.grid(row=1, column=0, sticky="nsew")
+bB.grid(row=2, column=0, sticky="nsew")
+bC.grid(row=3, column=0, sticky="nsew")
+bD.grid(row=4, column=0, sticky="nsew")
+bE.grid(row=4, column=1, sticky="nsew")
+bF.grid(row=4, column=2, sticky="nsew")
 
 # creating operations buttons
 padx_oper = padx_b
@@ -426,19 +508,30 @@ n_list = [b1, b2, b3, b4, b5, b5, b6, b7, b8, b9, b0, bA, bB, bC, bD, bE, bF]
 b_list = [equal_b, add_b, sub_b, mul_b, div_b, decimal_button, binary_button, octal_button, hexadecimal_button, clear_b]
 f_list = n_list + b_list
 # placing operations buttons
-add_b.grid(row=1, column=4)
-sub_b.grid(row=2, column=4)
-mul_b.grid(row=3, column=4)
-div_b.grid(row=4, column=4)
-clear_b.grid(row=5, column=4)
-decimal_button.grid(row=5, column=0)
-binary_button.grid(row=5, column=1)
-octal_button.grid(row=5, column=2)
-hexadecimal_button.grid(row=5, column=3)
+add_b.grid(row=1, column=4, sticky="nsew")
+sub_b.grid(row=2, column=4, sticky="nsew")
+mul_b.grid(row=3, column=4, sticky="nsew")
+div_b.grid(row=4, column=4, sticky="nsew")
+clear_b.grid(row=5, column=4, sticky="nsew")
+decimal_button.grid(row=5, column=0, sticky="nsew")
+binary_button.grid(row=5, column=1, sticky="nsew")
+octal_button.grid(row=5, column=2, sticky="nsew")
+hexadecimal_button.grid(row=5, column=3, sticky="nsew")
+
+# Configure grid weights
+button_frame.grid_columnconfigure(0, weight=1)
+button_frame.grid_columnconfigure(1, weight=1)
+button_frame.grid_columnconfigure(2, weight=1)
+button_frame.grid_columnconfigure(3, weight=1)
+button_frame.grid_columnconfigure(4, weight=1)
+for i in range(6):
+    button_frame.grid_rowconfigure(i, weight=1)
 
 # creating & placing the calculations bar
-entry = Entry(root, borderwidth=2, width=get_entry_width(), justify=CENTER, state='normal')
-entry.grid(row=0, column=0, columnspan=4, sticky=N)
+total_exp_entry = Label(entry_frame, width=get_entry_width()//2, text=total_exp, anchor=NE, padx=10, justify=CENTER, bg='white')
+entry = Entry(entry_frame, borderwidth=2, width=get_entry_width(), justify=CENTER, state='normal', bg='white')
+total_exp_entry.pack(expand=True, fill=BOTH, anchor=N)
+entry.pack(anchor=N, fill=X, padx=10, pady=(0, 10))
 
 # shortcuts
 root.bind('<c>', button_clear)
