@@ -1,5 +1,6 @@
 # imports
 from tkinter import *
+import customtkinter
 from customtkinter import *
 from tkinter import messagebox
 import math
@@ -11,9 +12,9 @@ multiple_numbers = ['+', '-', '*', '/', '^', 'randint']
 # window
 root = CTk()
 width = 400
-height = 540
-screen_width = root.winfo_width()
-screen_height = root.winfo_height()
+height = 570
+screen_width = root.winfo_screenwidth()
+screen_height = root.winfo_screenheight()
 placement_x = abs((screen_width // 2) - (width // 2))
 placement_y = abs((screen_height // 2) - (height // 2))
 root.geometry(f'{width}x{height}+{placement_x}+{placement_y}')
@@ -22,10 +23,14 @@ root.resizable(False, False)
 root.configure(bg='white')
 operation_color = '#ededed'
 equal_color = 'light blue'
-# logo = PhotoImage(file='Logo.png')
-# root.iconphoto(False, logo)
 set_appearance_mode('light')
 
+total_exp = ''
+equation = StringVar()
+expression = ''
+calc_mode = 'one'
+operation = None
+f_num = 0
 
 def button_click(number):
     current = entry.get()
@@ -38,25 +43,33 @@ def button_clear(event=None):
 
 
 def button_equal(event=None):
+    global total_exp
+    if operation is None:
+        return
     if operation in multiple_numbers:
         second_number = entry.get()
+        total_exp += second_number
         entry.delete(0, END)
-        s_num = int(second_number)
-        if operation == '+':
-            eq = (f_num + s_num)
-        if operation == '*':
-            eq = (f_num * s_num)
-        if operation == '/':
-            try:
-                eq = (f_num / s_num)
-            except ZeroDivisionError:
-                messagebox.showerror('Error', 'Divided by zero')
-        if operation == '-':
-            eq = (f_num - s_num)
-        if operation == '^':
-            eq = (pow(f_num, s_num))
-        if operation == 'randint':
-            eq = (random.randint(f_num, s_num))
+        try:
+            s_num = int(second_number)
+            if operation == '+':
+                eq = (f_num + s_num)
+            if operation == '*':
+                eq = (f_num * s_num)
+            if operation == '/':
+                try:
+                    eq = (f_num / s_num)
+                except ZeroDivisionError:
+                    messagebox.showerror('Error', 'Divided by zero')
+            if operation == '-':
+                eq = (f_num - s_num)
+            if operation == '^':
+                eq = (pow(f_num, s_num))
+            if operation == 'randint':
+                eq = (random.randint(f_num, s_num))
+            entry.insert(0, eq)
+        except ValueError:
+            pass
     else:
         if operation == '√':
             eq = (math.sqrt(f_num))
@@ -73,104 +86,269 @@ def button_equal(event=None):
             eq = (abs(f_num))
         if operation == 'fact':
             eq = (math.factorial(f_num))
-    try:
-        entry.insert(0, eq)
-    except:
-        pass
+        try:
+            entry.insert(0, eq)
+        except:
+            pass
+    total_exp_entry.configure(text=total_exp)
+    total_exp = ''
 
 
 def op(oper):
     global operation
     first_number = entry.get()
     global f_num
-    f_num = int(first_number)
+    global total_exp
+    try:
+        f_num = int(first_number)
+    except ValueError:
+        f_num = 0
     entry.delete(0, END)
     operation = oper
+    if oper in multiple_numbers:
+        total_exp = f'{f_num} {operation} '
+    else:
+        total_exp = f'{operation}({f_num})'
+        total_exp_entry.configure(text=total_exp)
+
+
+def aio_clac(num):
+    global expression
+    expression = expression + str(num)
+    equation.set(expression)
+
+
+def equalpress():
+    try:
+        global expression
+        safe_expression = expression.replace('^', '**').replace('÷', '/')
+        total = str(eval(safe_expression))
+        equation.set(total)
+        total_exp_entry.configure(text=expression)
+        expression = total
+    except:
+        equation.set(" error ")
+        expression = ""
+
+
+def aio_clear():
+    global expression
+    expression = ""
+    equation.set("")
 
 
 def settings(event=None):
     # window
     settings_root = CTkToplevel()
-    settings_root.title('')
-    btn_width = 5
+    settings_root.title('Settings')
+    settings_root.geometry('400x300')
+    settings_text = CTkLabel(settings_root, text='Settings', font=("Arial", 16, "bold"))
+    btn_width = 80
 
     def size():
         global padx_b, pady_b
         for i in f_list:
-            i.config(width=button_width, height=button_height)
+            i.configure(width=button_width, height=button_height)
         root.geometry(f'{width}x{height}')
-        entry.config(width=get_width())
+        entry.configure(width=get_width())
 
     def small():
         global button_height, button_width
         global width, height
         button_height, button_width = 3, 6
-        size_small.config(bg='grey'), size_normal.config(bg='white'), size_big.config(bg='white')
-        width, height = 260, 320
+        width, height = 260, 320 + 30
         size()
+        update_size_buttons('small')
 
     def medium():
         global button_height, button_width
         global width, height
         button_height, button_width = 6, 10
-        width, height = 400, 540
-        size_small.config(bg='white'), size_normal.config(bg='grey'), size_big.config(bg='white')
+        width, height = 400, 540 + 30
         size()
+        update_size_buttons('medium')
 
     def big():
         global button_height, button_width
         global width, height
         button_height, button_width = 9, 12
-        width, height = 470, 740
-        size_small.config(bg='white'), size_normal.config(bg='white'), size_big.config(bg='grey')
+        width, height = 470, 740 + 30
         size()
+        update_size_buttons('big')
+
+    def update_size_buttons(active_size):
+        buttons = {'small': size_small, 'medium': size_normal, 'big': size_big}
+        for name, btn in buttons.items():
+            if name == active_size:
+                btn.configure(fg_color=("#3B8ED0", "#1F6AA5"))
+            else:
+                btn.configure(fg_color=("gray75", "gray25"))
 
     def dark_theme():
-        theme_dark.config(bg='grey'), theme_light.config(bg='white')
+        # Dark Theme Colors
+        bg_color = '#1e1e1e'
+        btn_num_bg = '#333333'
+        btn_op_bg = '#4a4a4a'
+        text_color = 'white'
+        
+        root.configure(bg=bg_color)
+        entry_frame.configure(bg=bg_color)
+        button_frame.configure(bg=bg_color)
+        
         for i in n_list:
-            i.config(bg='grey')
+            i.configure(bg=btn_num_bg, fg=text_color)
         for i in b_list:
-            i.config(bg='dark grey')
-        equal_b.config(bg='light blue')
-        entry.config(bg='#373737', foreground='green')
+            i.configure(bg=btn_op_bg, fg=text_color)
+        equal_b.configure(bg='#005f73', fg='white')
+        entry.configure(bg='#2b2b2b', foreground='white', insertbackground='white')
+        total_exp_entry.configure(bg=bg_color, foreground='gray')
+        
         set_appearance_mode('dark')
+        update_theme_buttons('dark')
 
     def light_theme():
-        theme_dark.config(bg='white'), theme_light.config(bg='grey')
+        # Light Theme Colors
+        bg_color = 'white'
+        
+        root.configure(bg=bg_color)
+        entry_frame.configure(bg=bg_color)
+        button_frame.configure(bg=bg_color)
+        
         for i in n_list:
-            i.config(bg='SystemButtonFace')
+            i.configure(bg='SystemButtonFace', fg='black')
         for i in b_list:
-            i.config(bg=operation_color)
-        equal_b.config(bg=equal_color)
-        entry.config(bg='white', foreground='black')
+            i.configure(bg=operation_color, fg='black')
+        equal_b.configure(bg=equal_color, fg='black')
+        entry.configure(bg='white', foreground='black', insertbackground='black')
+        total_exp_entry.configure(bg='white', foreground='gray')
+        
         set_appearance_mode('light')
+        update_theme_buttons('light')
+
+    def update_theme_buttons(active_theme):
+        if active_theme == 'light':
+            theme_light.configure(fg_color=("#3B8ED0", "#1F6AA5"))
+            theme_dark.configure(fg_color=("gray75", "gray25"))
+        else:
+            theme_light.configure(fg_color=("gray75", "gray25"))
+            theme_dark.configure(fg_color=("#3B8ED0", "#1F6AA5"))
+
+    def change_c(mode):
+        global calc_mode
+        calc_mode = mode
+        if mode == 'one':
+            b1.configure(command=lambda: button_click(1))
+            b2.configure(command=lambda: button_click(2))
+            b3.configure(command=lambda: button_click(3))
+            b4.configure(command=lambda: button_click(4))
+            b5.configure(command=lambda: button_click(5))
+            b6.configure(command=lambda: button_click(6))
+            b7.configure(command=lambda: button_click(7))
+            b8.configure(command=lambda: button_click(8))
+            b9.configure(command=lambda: button_click(9))
+            b0.configure(command=lambda: button_click(0))
+            
+            add_b.configure(command=lambda: op('+'))
+            sub_b.configure(command=lambda: op('-'))
+            mul_b.configure(command=lambda: op('*'))
+            div_b.configure(command=lambda: op('/'))
+            power_b.configure(command=lambda: op('^'))
+            sqrt_b.configure(command=lambda: op('√'))
+            exp_b.configure(command=lambda: op('exp'))
+            sin_b.configure(command=lambda: op('sin'))
+            cos_b.configure(command=lambda: op('cos'))
+            tan_b.configure(command=lambda: op('tan'))
+            abs_b.configure(command=lambda: op('abs'))
+            fac_b.configure(command=lambda: op('fact'))
+            rad_b.configure(command=lambda: op('randint'))
+            clear_b.configure(command=button_clear)
+            equal_b.configure(command=button_equal)
+            entry.configure(textvariable=None)
+            
+            one_at_a_time.configure(fg_color=("#3B8ED0", "#1F6AA5"))
+            everything_at_once.configure(fg_color=("gray75", "gray25"))
+        else:
+            b1.configure(command=lambda: aio_clac(1))
+            b2.configure(command=lambda: aio_clac(2))
+            b3.configure(command=lambda: aio_clac(3))
+            b4.configure(command=lambda: aio_clac(4))
+            b5.configure(command=lambda: aio_clac(5))
+            b6.configure(command=lambda: aio_clac(6))
+            b7.configure(command=lambda: aio_clac(7))
+            b8.configure(command=lambda: aio_clac(8))
+            b9.configure(command=lambda: aio_clac(9))
+            b0.configure(command=lambda: aio_clac(0))
+
+            add_b.configure(command=lambda: aio_clac('+'))
+            sub_b.configure(command=lambda: aio_clac('-'))
+            mul_b.configure(command=lambda: aio_clac('*'))
+            div_b.configure(command=lambda: aio_clac('÷'))
+            power_b.configure(command=lambda: aio_clac('^'))
+            
+            # Scientific functions for AIO
+            sqrt_b.configure(command=lambda: aio_clac('math.sqrt('))
+            exp_b.configure(command=lambda: aio_clac('math.exp('))
+            sin_b.configure(command=lambda: aio_clac('math.sin('))
+            cos_b.configure(command=lambda: aio_clac('math.cos('))
+            tan_b.configure(command=lambda: aio_clac('math.tan('))
+            abs_b.configure(command=lambda: aio_clac('abs('))
+            fac_b.configure(command=lambda: aio_clac('math.factorial('))
+            rad_b.configure(command=lambda: aio_clac('random.randint(')) # This will be tricky for user
+            
+            clear_b.configure(command=aio_clear)
+            equal_b.configure(command=equalpress)
+            entry.configure(textvariable=equation)
+            
+            one_at_a_time.configure(fg_color=("gray75", "gray25"))
+            everything_at_once.configure(fg_color=("#3B8ED0", "#1F6AA5"))
 
     # text and buttons for sizes
-    settings_text = CTkLabel(settings_root, text='Settings')
+    settings_text = CTkLabel(settings_root, text='Settings', font=("Arial", 16, "bold"))
     size_text = CTkLabel(settings_root, text='Size settings:', pady=5)
     size_small = CTkButton(settings_root, text='Small', command=small, width=btn_width)
     size_normal = CTkButton(settings_root, text='Medium', command=medium, width=btn_width)
     size_big = CTkButton(settings_root, text='Big', command=big, width=btn_width)
     # text and buttons for themes
     theme_text = CTkLabel(settings_root, text='Theme settings:', pady=5)
-    theme_light = CTkButton(settings_root, text='light theme', command=light_theme, width=btn_width)
-    theme_dark = CTkButton(settings_root, text='Dracula theme', command=dark_theme, width=btn_width)
-    light_theme()
-    settings_text.grid(row=0)
-    size_text.grid(row=1)
-    size_small.grid(row=2, column=0)
-    size_normal.grid(row=2, column=1)
-    size_big.grid(row=2, column=2)
-    theme_text.grid(row=3)
-    theme_light.grid(row=4, column=0)
-    theme_dark.grid(row=4, column=2)
-    medium()
+    theme_light = CTkButton(settings_root, text='Light', command=light_theme, width=btn_width)
+    theme_dark = CTkButton(settings_root, text='Dark', command=dark_theme, width=btn_width)
+    
+    # calculation modes
+    calculation_text = CTkLabel(settings_root, text='Calculation Mode:', pady=5)
+    one_at_a_time = CTkButton(settings_root, text='One at a time', command=lambda: change_c('one'), width=btn_width)
+    everything_at_once = CTkButton(settings_root, text='All at once', command=lambda: change_c('everything')
+                                   , width=btn_width)
+
+    # Initialize button states
+    update_size_buttons('medium') # Default assumption
+    update_theme_buttons(customtkinter.get_appearance_mode().lower())
+    change_c(calc_mode)
+
+    settings_text.grid(row=0, column=0, columnspan=3, pady=10)
+    
+    size_text.grid(row=1, column=0, columnspan=3)
+    size_small.grid(row=2, column=0, padx=5, pady=5)
+    size_normal.grid(row=2, column=1, padx=5, pady=5)
+    size_big.grid(row=2, column=2, padx=5, pady=5)
+    
+    theme_text.grid(row=3, column=0, columnspan=3)
+    theme_light.grid(row=4, column=0, padx=5, pady=5)
+    theme_dark.grid(row=4, column=2, padx=5, pady=5)
+    
+    calculation_text.grid(row=5, column=0, columnspan=3)
+    one_at_a_time.grid(row=6, column=0, padx=5, pady=5)
+    everything_at_once.grid(row=6, column=2, padx=5, pady=5)
+
 
 def get_width():
     return width // 8 -10
 
-button_frame = Frame(root, padx=0)
-button_frame.grid(row=1)
+# frames
+entry_frame = Frame(root, bg='white')
+entry_frame.pack(fill=BOTH, expand=True)
+button_frame = Frame(root, padx=0, bg='white')
+button_frame.pack(fill=BOTH, expand=True)
+
 # creating numerical buttons
 padx_b = 1
 pady_b = 3
@@ -208,16 +386,16 @@ b0 = Button(button_frame, text="0", command=lambda: button_click(0), padx=padx_b
             , width=button_width)
 
 # placing numerical buttons
-b1.grid(row=1, column=1)
-b2.grid(row=1, column=2)
-b3.grid(row=1, column=3)
-b4.grid(row=2, column=1)
-b5.grid(row=2, column=2)
-b6.grid(row=2, column=3)
-b7.grid(row=3, column=1)
-b8.grid(row=3, column=2)
-b9.grid(row=3, column=3)
-b0.grid(row=4, column=1)
+b1.grid(row=1, column=1, sticky="nsew")
+b2.grid(row=1, column=2, sticky="nsew")
+b3.grid(row=1, column=3, sticky="nsew")
+b4.grid(row=2, column=1, sticky="nsew")
+b5.grid(row=2, column=2, sticky="nsew")
+b6.grid(row=2, column=3, sticky="nsew")
+b7.grid(row=3, column=1, sticky="nsew")
+b8.grid(row=3, column=2, sticky="nsew")
+b9.grid(row=3, column=3, sticky="nsew")
+b0.grid(row=4, column=1, sticky="nsew")
 
 # creating operations buttons
 padx_oper = padx_b
@@ -274,25 +452,36 @@ b_list = [equal_b, add_b, sub_b, mul_b, div_b,  power_b, sqrt_b, exp_b, sin_b, c
 f_list = n_list + b_list
 
 # placing operations buttons
-equal_b.grid(row=4, column=2)
-add_b.grid(row=1, column=4)
-sub_b.grid(row=2, column=4)
-mul_b.grid(row=3, column=4)
-div_b.grid(row=4, column=4)
-power_b.grid(row=0, column=4)
-sqrt_b.grid(row=0, column=1)
-exp_b.grid(row=0, column=0)
-sin_b.grid(row=1, column=0)
-cos_b.grid(row=2, column=0)
-tan_b.grid(row=3, column=0)
-abs_b.grid(row=0, column=3)
-fac_b.grid(row=0, column=2)
-rad_b.grid(row=4, column=0)
-clear_b.grid(row=4, column=3)
+equal_b.grid(row=4, column=2, sticky="nsew")
+add_b.grid(row=1, column=4, sticky="nsew")
+sub_b.grid(row=2, column=4, sticky="nsew")
+mul_b.grid(row=3, column=4, sticky="nsew")
+div_b.grid(row=4, column=4, sticky="nsew")
+power_b.grid(row=0, column=4, sticky="nsew")
+sqrt_b.grid(row=0, column=1, sticky="nsew")
+exp_b.grid(row=0, column=0, sticky="nsew")
+sin_b.grid(row=1, column=0, sticky="nsew")
+cos_b.grid(row=2, column=0, sticky="nsew")
+tan_b.grid(row=3, column=0, sticky="nsew")
+abs_b.grid(row=0, column=3, sticky="nsew")
+fac_b.grid(row=0, column=2, sticky="nsew")
+rad_b.grid(row=4, column=0, sticky="nsew")
+clear_b.grid(row=4, column=3, sticky="nsew")
+
+# Configure grid weights
+button_frame.grid_columnconfigure(0, weight=1)
+button_frame.grid_columnconfigure(1, weight=1)
+button_frame.grid_columnconfigure(2, weight=1)
+button_frame.grid_columnconfigure(3, weight=1)
+button_frame.grid_columnconfigure(4, weight=1)
+for i in range(5):
+    button_frame.grid_rowconfigure(i, weight=1)
 
 # creating & placing the calculations bar
-entry = Entry(root, borderwidth=2, width=get_width(), justify=CENTER, state='normal')
-entry.grid(row=0, column=0, columnspan=1, sticky=N)
+total_exp_entry = Label(entry_frame, width=get_width()//2, text=total_exp, anchor=NE, padx=10, justify=CENTER, bg='white')
+entry = Entry(entry_frame, borderwidth=2, width=get_width(), justify=CENTER, state='normal', bg='white')
+total_exp_entry.pack(expand=True, fill=BOTH, anchor=N)
+entry.pack(anchor=N, fill=X, padx=10, pady=(0, 10))
 
 # shortcuts
 root.bind('<Key-c>', button_clear)
